@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://c2pq4f582obs"]
+
+[ext_resource type="Script" path="res://scripts/sprites/Player.cs" id="1_03jl8"]
+[ext_resource type="Shader" path="res://shaders/game/Pixelization.gdshader" id="2_sbf54"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_71cj4"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_kvy5r"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f61df"]
+render_priority = 0
+shader = ExtResource("2_sbf54")
+shader_parameter/depth_threshold = 0.5
+shader_parameter/normal_threshold = 0.5
+shader_parameter/steep_angle_threshold = 0.5
+shader_parameter/steep_angle_scale = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_75c2m"]
+material = SubResource("ShaderMaterial_f61df")
+size = Vector2(2, 2)
+
+[node name="Player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.03506, 0)
+script = ExtResource("1_03jl8")
+
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_71cj4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_kvy5r")
+
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="Camera" type="Camera3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 5)
+
+[node name="Filter" type="MeshInstance3D" parent="Pivot/Camera"]
+mesh = SubResource("QuadMesh_75c2m")
+
+[node name="CameraCollider" type="RayCast3D" parent="Pivot"]
+target_position = Vector3(0, 5, 5)

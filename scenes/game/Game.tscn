@@ -1,0 +1,54 @@
+[gd_scene load_steps=10 format=3 uid="uid://ol7mayyunoqk"]
+
+[ext_resource type="PackedScene" uid="uid://c2pq4f582obs" path="res://scenes/sprites/Player.tscn" id="1_3x43v"]
+[ext_resource type="Shader" path="res://shaders/game/Sky.gdshader" id="4_3mgyc"]
+[ext_resource type="PackedScene" uid="uid://dm6ngggpxv3ip" path="res://assets/models/鸟居.glb" id="5_kkuct"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dmnbg"]
+size = Vector3(100, 1, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5clgi"]
+albedo_color = Color(0.290196, 1, 0.490196, 1)
+roughness = 0.25
+
+[sub_resource type="BoxMesh" id="BoxMesh_ct45v"]
+material = SubResource("StandardMaterial3D_5clgi")
+size = Vector3(60, 1, 60)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_immad"]
+shader = ExtResource("4_3mgyc")
+shader_parameter/sky_color = Color(0.576471, 0.713726, 1, 1)
+shader_parameter/horizon_color = Color(0.839216, 0.792157, 0.878431, 1)
+
+[sub_resource type="Sky" id="Sky_trav6"]
+sky_material = SubResource("ShaderMaterial_immad")
+
+[sub_resource type="Environment" id="Environment_0q65v"]
+background_mode = 2
+sky = SubResource("Sky_trav6")
+ambient_light_source = 3
+
+[node name="Game" type="Node3D"]
+
+[node name="Player" parent="." instance=ExtResource("1_3x43v")]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_dmnbg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0611153, 0, 0)
+mesh = SubResource("BoxMesh_ct45v")
+
+[node name="Decorations" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_0q65v")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.77178, 0.362364, -0.52254, 0, 0.821746, 0.569853, 0.63589, -0.439801, 0.634207, -17.2793, 12.0191, 30.9604)
+shadow_enabled = true
+
+[node name="鸟居" parent="." instance=ExtResource("5_kkuct")]
